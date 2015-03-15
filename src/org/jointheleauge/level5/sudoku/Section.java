@@ -1,30 +1,47 @@
 package org.jointheleauge.level5.sudoku;
 
+import static org.jointheleauge.level5.sudoku.Sudoku.NUM_SQUARES_IN_SECTION;
+
 /**
  * Represents a portion of the board that must be updated when a board square
  * contained within this section is modified
  */
-public interface Section {
+public abstract class Section {
+
+	/**
+	 * 
+	 * @param square
+	 *            is the board data that holds all Sudoku information
+	 * @param index
+	 * 			  is the 0 based index into the section of the Square to return
+	 * 
+	 * @return Square with at the index this section from the board
+	 */
+	public abstract Square sectionSquare(Square[][] square, int index);
+
+	/**
+	 * 
+	 * @param aSquare
+	 * @return true if aSquare is in this section
+	 */
+	protected abstract boolean isInSection(Square aSquare);
+
 	/**
 	 * @param square
 	 *            is the board data that holds all Sudoku information
 	 * @param aSquare
 	 *            is the Square used to update all Section values
 	 */
-	void update(Square[][] square, Square aSquare);
+	void update(Square[][] square, Square aSquare) {
+		if (isInSection(aSquare)) {
+			for (int i = 0; i < NUM_SQUARES_IN_SECTION; i++) {
+				Square sectionSquare = sectionSquare(square, i);
+				if (sectionSquare.getValue() == 0) {
+					sectionSquare.removePossibleValue(aSquare.getValue());
+				}
+			}
+		}
+	};
 	
-	 /**
-	 * @return array of int of length two that contains the first pair of
-	 * possible values that occur in two squares of this section;
-	 * returns null if no such pair exists
-	 */
-	int[] getPair(Square[][] square);
-	
-	 /**
-	 * @param array of int of length two that contains a pair of
-	 * possible values; removes the two values from all squares not
-	 * having the pair as their only possible values
-	 */
-	void processPair(Square[][] square, int[] pair); 
 
 }

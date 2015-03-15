@@ -1,22 +1,31 @@
 package org.jointheleauge.level5.sudoku;
 
+import static org.jointheleauge.level5.sudoku.Sudoku.NUM_SQUARES_IN_SECTION;
+
 /**
  * Row represents a row of squares on a Sudoku board
  */
-public class Column implements Section {
+public class Column extends Section {
 	private int columnNum;
 
 	public Column(int num) {
 		columnNum = num;
 	}
 
-	public void update(Square[][] square, Square aSquare) {
-		if (aSquare.getColumn() == columnNum) {
-			for (int item = 0; item < square.length; item++) {
-				if (square[item][columnNum].getValue() == 0)
-					square[item][columnNum]
-							.removePossibleValue(aSquare.getValue());
-			}
-		}
+	@Override
+	public Square sectionSquare(Square[][] square, int index) {
+		if (index < 0 || index > NUM_SQUARES_IN_SECTION) throw new IllegalArgumentException();
+		return square[index][columnNum];
 	}
+
+	@Override
+	protected boolean isInSection(Square aSquare) {
+		return (aSquare.getColumn() == columnNum);
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Column [%d]", columnNum);
+	}
+
 }

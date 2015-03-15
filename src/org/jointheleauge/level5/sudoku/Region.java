@@ -1,9 +1,12 @@
 package org.jointheleauge.level5.sudoku;
 
+import static org.jointheleauge.level5.sudoku.Sudoku.NUM_SQUARES_IN_SECTION;
+import static org.jointheleauge.level5.sudoku.Sudoku.REGION_SIDE_LENGTH;
+
 /**
  * Row represents a row of squares on a Sudoku board
  */
-public class Region implements Section {
+public class Region extends Section {
 	// Region is defined by its top-left square
 	private int columnNum;
 	private int rowNum;
@@ -13,23 +16,22 @@ public class Region implements Section {
 		columnNum = column;
 	}
 
-	public void update(Square[][] square, Square aSquare) {
-		if (isInRegion(aSquare)) {
-			for (int r = rowNum; r < rowNum + 3; r += 3) {
-				for (int c = columnNum; c < columnNum + 3; c += 3) {
-					if (square[r][c].getValue() == 0)
-						square[r][c].removePossibleValue(aSquare.getValue());
-				}
-			}
-		}
+	@Override
+	public Square sectionSquare(Square[][] square, int index) {
+		if (index < 0 || index > NUM_SQUARES_IN_SECTION) throw new IllegalArgumentException();
+		int row = index / REGION_SIDE_LENGTH;
+		int col = index % REGION_SIDE_LENGTH;
+		return square[rowNum+row][columnNum+col];
 	}
 
-	private boolean isInRegion(Square aSquare) {
-		if ((rowNum <= aSquare.getRow() && aSquare.getRow() < rowNum + 3) &&
-			(columnNum <= aSquare.getColumn() && aSquare.getColumn() < columnNum + 3)) {
-			return true;
-		} else {
-			return false;
-		}
+	@Override
+	protected boolean isInSection(Square aSquare) {
+		return ((rowNum <= aSquare.getRow()) && (aSquare.getRow() < rowNum + 3) &&
+				(columnNum <= aSquare.getColumn()) && (aSquare.getColumn() < columnNum + 3));
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("Region [%d, %d]", rowNum, columnNum);
 	}
 }
