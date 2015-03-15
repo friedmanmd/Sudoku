@@ -51,7 +51,7 @@ public class Square extends JPanel {
 			for (int i = 0; i < 9; i++) {
 				if (i == 4) {
 					value[i].setText(String.format("%d", aSquare.getValue()));
-					value[i].setFont(new Font("Serif", Font.BOLD, 24));
+					value[i].setFont(new Font("Serif", Font.BOLD, 32));
 				} else {
 					value[i].setText(" ");
 				}

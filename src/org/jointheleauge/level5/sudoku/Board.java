@@ -4,11 +4,20 @@ import static org.jointheleauge.level5.sudoku.Sudoku.NUM_ROWS;
 import static org.jointheleauge.level5.sudoku.Sudoku.NUM_COLUMNS;
 import static org.jointheleauge.level5.sudoku.Sudoku.NUM_REGIONS;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Observable;
+
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonNumber;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 
 import org.jointheleauge.level5.sudoku.strategy.*;
 import org.apache.logging.log4j.Logger; 
 import org.apache.logging.log4j.LogManager;
+
 
 /**
  * Board class models the 9 by 9 rectangular array of squares. Each square can
@@ -45,6 +54,31 @@ public class Board extends Observable {
 		sectionsInit();
 		strategiesInit();
 	}
+	
+	public void initFromFile(String fileName) {
+		FileInputStream is = null;
+		try {
+			is = new FileInputStream(fileName);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		JsonReader rdr = Json.createReader(is);
+		JsonObject object = rdr.readObject();
+		rdr.close();
+
+		JsonArray rows = object.getJsonArray("puzzle");
+		int r = 0;
+		for (JsonArray row : rows.getValuesAs(JsonArray.class)) {
+			int c = 0;
+			for (JsonNumber columns : row.getValuesAs(JsonNumber.class)) {
+				this.updateSections(r, c, columns.intValue());
+				c += 1;
+			}
+			r += 1;
+		}
+
+	}
 
 	/*
 	 * Initialize all sections (rows, columns, and regions) so each type of
@@ -79,7 +113,8 @@ public class Board extends Observable {
 		stateChanged = true;
 
 		while (stateChanged) {
-			System.out.println(String.format("Iteration %d", i++));
+			logger.debug("Iteration {}", i);
+			i += 1;
 			stateChanged = false;
 			
 			for (Strategy aStrategy : strategy) {
@@ -122,7 +157,8 @@ public class Board extends Observable {
 //	}
 
 	public void updateSections(int row, int column, int value) {
-		square[row][column].setValue(value);
+		if (value > 0)
+			square[row][column].setValue(value);
 	}
 
 	public void updateBoard(Square aSquare) {
