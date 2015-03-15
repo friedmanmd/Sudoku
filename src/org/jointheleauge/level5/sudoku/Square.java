@@ -6,11 +6,6 @@ public class Square {
 		// TODO Auto-generated constructor stub
 	}
 
-	public int getRow() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 	public int getValue() {
 		// TODO Auto-generated method stub
 		return 0;
@@ -19,6 +14,16 @@ public class Square {
 	public void removePossibleValue(int value) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public int getRow() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getColumn() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
