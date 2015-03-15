@@ -36,8 +36,18 @@ public class Board implements Sudoku {
 	 * section is initialized with consecutive integer values beginning with 0.
 	 */
 	private void sectionsInit() {
-		// initialize all sections (rows, columns, regions)
-		// <... code omitted ...>
+		int totalSections = 0;
+		section = new Section[NUM_ROWS+NUM_COLUMNS+NUM_REGIONS];
+		for (int r = 0; r < NUM_ROWS; r++) {
+			section[totalSections++] = new Row(r);
+		}
+		for (int c = 0; c < NUM_COLUMNS; c++) {
+			section[totalSections++] = new Column(c);
+		}
+		for (int r = 0; r < NUM_ROWS; r += 3) {
+			for (int c = 0; c < NUM_COLUMNS; c += 3) {
+				section[totalSections++] = new Region(r,c);
+			}
+		}
 	}
-	// ... additional code omitted
 }
