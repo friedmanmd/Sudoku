@@ -6,12 +6,18 @@ import static org.jointheleauge.level5.sudoku.Sudoku.NUM_REGIONS;
 
 import java.util.Observable;
 
+import org.jointheleauge.level5.sudoku.strategy.*;
+import org.apache.logging.log4j.Logger; 
+import org.apache.logging.log4j.LogManager;
+
 /**
  * Board class models the 9 by 9 rectangular array of squares. Each square can
  * be blank or have an integer value 1 through 9. Each square also has a list of
  * possible values that may be used for that square's value.
  */
 public class Board extends Observable {
+	private static final Logger logger = LogManager.getLogger(Board.class.getName());
+
 	// all squares on the Sudoku board
 	private Square[][] square;
 	// true if a square on the board has a new state; false otherwise
@@ -61,65 +67,77 @@ public class Board extends Observable {
 	}
 	
 	private void strategiesInit() {
-		strategy = new Strategy[1];
-		strategy[0] = new Pair();
+		strategy = new Strategy[3];
+		strategy[0] = new OnlyChoiceRule();
+		strategy[1] = new SinglePossibilityRule();
+		strategy[2] = new NakedTwinExclusion();
 	}
 
 
 	public void solve() {
+		int i = 0;
 		stateChanged = true;
 
 		while (stateChanged) {
+			System.out.println(String.format("Iteration %d", i++));
 			stateChanged = false;
 			
 			for (Strategy aStrategy : strategy) {
-				for (Section aSection : section) {
-					aStrategy.invokeOn(aSection, square);
+				if (aStrategy instanceof BoardStrategy) {
+					aStrategy.invokeOn(square, section);
+				} else if (aStrategy instanceof SingleSectionStrategy) {
+					for (Section aSection : section) {
+						aStrategy.invokeOn(square, aSection);
+					}					
 				}
 			}
-			
-			resolveKnownSquares();
 		}
 		
+		logger.info("Solved");
 		
 		return;
 	}
 	
-	protected void resolveKnownSquares() {
-		stateChanged = false;
-		boolean doneUpdating = false;
-		
-		while (!doneUpdating) {
-			doneUpdating = true;
-			for (Square[] aRow : square) {
-				for (Square aSquare : aRow) {
-					if (aSquare.getValue() == 0) {
-						int[] values = aSquare.getPossibleValues();
-						if (values != null && values.length == 1) {
-							updateSections(aSquare.getRow(), aSquare.getColumn(), values[0]);
-							stateChanged = true;
-							doneUpdating = false;
-						}
-					}
-				}
-			}
-		}
-		return;
-	}
+// Technically this is a strategy
+//	protected void resolveKnownSquares() {
+//		stateChanged = false;
+//		boolean doneUpdating = false;
+//		
+//		while (!doneUpdating) {
+//			doneUpdating = true;
+//			for (Square[] aRow : square) {
+//				for (Square aSquare : aRow) {
+//					if (aSquare.getValue() == 0) {
+//						int[] values = aSquare.getPossibleValues();
+//						if (values != null && values.length == 1) {
+//							updateSections(aSquare.getRow(), aSquare.getColumn(), values[0]);
+//							stateChanged = true;
+//							doneUpdating = false;
+//						}
+//					}
+//				}
+//			}
+//		}
+//		return;
+//	}
 
 	public void updateSections(int row, int column, int value) {
 		square[row][column].setValue(value);
-		for (Section aSection : section) {
-			aSection.update(square, square[row][column]);
-		}		
-		resolveKnownSquares();
 	}
 
 	public void updateBoard(Square aSquare) {
+		stateChanged = true;
+		redrawSquare(aSquare);
+		for (Section aSection : section) {
+			aSection.update(square, aSquare);
+		}
+	}
+	
+	public void redrawSquare(Square aSquare) {
 		setChanged();
 		notifyObservers(aSquare);
 //		try {
-//			Thread.sleep(100);
+//			Thread.sleep(50);
 //		} catch (InterruptedException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();

@@ -24,7 +24,7 @@ public abstract class Section {
 	 * @param aSquare
 	 * @return true if aSquare is in this section
 	 */
-	protected abstract boolean isInSection(Square aSquare);
+	public abstract boolean isInSection(Square aSquare);
 
 	/**
 	 * @param square
@@ -32,7 +32,7 @@ public abstract class Section {
 	 * @param aSquare
 	 *            is the Square used to update all Section values
 	 */
-	void update(Square[][] square, Square aSquare) {
+	public void update(Square[][] square, Square aSquare) {
 		if (isInSection(aSquare)) {
 			for (int i = 0; i < NUM_SQUARES_IN_SECTION; i++) {
 				Square sectionSquare = sectionSquare(square, i);

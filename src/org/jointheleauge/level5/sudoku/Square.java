@@ -42,8 +42,8 @@ public class Square {
 	public void removePossibleValue(int value) {
 		if (possibleValue[value-1]) {
 			possibleValue[value-1] = false;
-			board.updateBoard(this);
 		}
+		board.redrawSquare(this);
 	}
 
 	public int[] getPossibleValues() {

@@ -25,7 +25,7 @@ public class Region extends Section {
 	}
 
 	@Override
-	protected boolean isInSection(Square aSquare) {
+	public boolean isInSection(Square aSquare) {
 		return ((rowNum <= aSquare.getRow()) && (aSquare.getRow() < rowNum + 3) &&
 				(columnNum <= aSquare.getColumn()) && (aSquare.getColumn() < columnNum + 3));
 	}

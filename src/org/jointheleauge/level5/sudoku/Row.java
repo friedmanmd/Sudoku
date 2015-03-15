@@ -19,7 +19,7 @@ public class Row extends Section {
 	}
 
 	@Override
-	protected boolean isInSection(Square aSquare) {
+	public boolean isInSection(Square aSquare) {
 		return (aSquare.getRow() == rowNum);
 	}
 	

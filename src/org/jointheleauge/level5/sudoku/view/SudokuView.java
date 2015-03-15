@@ -11,6 +11,7 @@ import java.util.Observer;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import javax.swing.border.Border;
 
 public class SudokuView implements Observer {
@@ -18,6 +19,8 @@ public class SudokuView implements Observer {
 	
 	public SudokuView() {
 		JFrame frame = new JFrame("Sudoku");
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
 		JPanel mainPanel = new JPanel();
 		frame.add(mainPanel);
 		
