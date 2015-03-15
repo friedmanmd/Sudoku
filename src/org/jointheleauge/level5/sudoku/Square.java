@@ -26,4 +26,9 @@ public class Square {
 		return 0;
 	}
 
+	public int[] getPossibleValues() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
