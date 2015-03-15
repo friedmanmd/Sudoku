@@ -1,11 +1,15 @@
 package org.jointheleauge.level5.sudoku;
 
+import static org.jointheleauge.level5.sudoku.Sudoku.NUM_ROWS;
+import static org.jointheleauge.level5.sudoku.Sudoku.NUM_COLUMNS;
+import static org.jointheleauge.level5.sudoku.Sudoku.NUM_REGIONS;
+
 /**
  * Board class models the 9 by 9 rectangular array of squares. Each square can
  * be blank or have an integer value 1 through 9. Each square also has a list of
  * possible values that may be used for that square's value.
  */
-public class Board implements Sudoku {
+public class Board {
 	// all squares on the Sudoku board
 	private Square[][] square;
 	// true if a square on the board has a new state; false otherwise
