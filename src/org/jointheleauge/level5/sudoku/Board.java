@@ -3,6 +3,7 @@ package org.jointheleauge.level5.sudoku;
 import static org.jointheleauge.level5.sudoku.Sudoku.NUM_ROWS;
 import static org.jointheleauge.level5.sudoku.Sudoku.NUM_COLUMNS;
 import static org.jointheleauge.level5.sudoku.Sudoku.NUM_REGIONS;
+import static org.jointheleauge.level5.sudoku.Sudoku.NUM_SQUARES_IN_SECTION;
 
 import java.util.Observable;
 
@@ -50,14 +51,13 @@ public class Board extends Observable {
 		for (int r = 0; r < NUM_ROWS; r++) {
 			section[totalSections++] = new Row(r);
 		}
-		for (int c = 0; c < NUM_COLUMNS; c++) {
-			section[totalSections++] = new Column(c);
+		for (int i = 0; i < NUM_SQUARES_IN_SECTION; i++) {
+			section[totalSections++] = new DiagonalTLBR(i);
 		}
-		for (int r = 0; r < NUM_ROWS; r += 3) {
-			for (int c = 0; c < NUM_COLUMNS; c += 3) {
-				section[totalSections++] = new Region(r,c);
-			}
+		for (int i = 0; i < NUM_SQUARES_IN_SECTION; i++) {
+			section[totalSections++] = new DiagonalTLBR(i);
 		}
+
 	}
 	
 	private void strategiesInit() {
